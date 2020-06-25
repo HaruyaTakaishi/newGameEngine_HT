@@ -13,6 +13,25 @@ Engine::~Engine()
 
 }
 
+void Engine::Update()
+{
+	sf::Event _event;
+
+	while (window->pollEvent(_event))
+	{
+		// "close requested" event, close window
+		if (_event.type == sf::Event::Closed)
+		{
+			std::cout << "Closing now..." << std::endl;
+			window->close();
+		}
+
+	}
+
+	world->tick(10.0f); // timer 
+
+}
+
 Engine& Engine::GetInstance()
 {
 	static Engine _instance;
@@ -32,18 +51,9 @@ void Engine::Start(sf::RenderWindow* win)
 	}
 }
 
-void Engine::Update()
+void Engine::AddSystem(ECS::EntitySystem* newsys)
 {
-	sf::Event _event;
-
-	while (window->pollEvent(_event))
-	{
-		// "close requested" event, close window
-		if (_event.type == sf::Event::Closed)
-		{
-			std::cout << "Closing now..." << std::endl;
-			window->close();
-		}
-
-	}
+	world->registerSystem(newsys);
+	world->enableSystem(newsys);
 }
+
